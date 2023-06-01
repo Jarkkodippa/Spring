@@ -2,6 +2,7 @@ package com.springtrain.employeeservice.service.impl;
 
 import com.springtrain.employeeservice.dto.EmployeeDto;
 import com.springtrain.employeeservice.entity.Employee;
+import com.springtrain.employeeservice.exception.ResourceNotFoundException;
 import com.springtrain.employeeservice.mapper.AutoEmployeeMapper;
 import com.springtrain.employeeservice.repository.EmployeeRepository;
 import com.springtrain.employeeservice.service.EmployeeService;
@@ -21,42 +22,21 @@ public class EmployeeServiceImpl implements EmployeeService {
     public EmployeeDto saveEmployee(EmployeeDto employeeDto) {
 
         Employee employee = AutoEmployeeMapper.MAPPER.mapToEmployee(employeeDto);
-        /*
-        Employee employee = new Employee(
-                employeeDto.getId(),
-                employeeDto.getFirstName(),
-                employeeDto.getLastName(),
-                employeeDto.getEmail()
-        );
-*/
+
         Employee savedEmployee = employeeRepository.save(employee);
         EmployeeDto savedEmployeeDto = modelMapper.map(savedEmployee, EmployeeDto.class);
-        /*
-        Employee savedEmployee = employeeRepository.save(employee);
-        EmployeeDto savedEmployeeDto = new EmployeeDto(
-                savedEmployee.getId(),
-                savedEmployee.getFirstName(),
-                savedEmployee.getLastName(),
-                savedEmployee.getEmail()
-        );
-*/
+
         return savedEmployeeDto;
     }
 
     @Override
     public EmployeeDto getEmployeeById(Long employeeId) {
 
-        Employee employee = employeeRepository.findById(employeeId).get();
+        Employee employee = employeeRepository.findById(employeeId).orElseThrow(
+                () -> new ResourceNotFoundException("Employee", "Id", employeeId));
 
         EmployeeDto employeeDto = AutoEmployeeMapper.MAPPER.mapToEmployeeDto(employee);
-        /*
-        EmployeeDto employeeDto = new EmployeeDto(
-                employee.getId(),
-                employee.getFirstName(),
-                employee.getLastName(),
-                employee.getEmail()
-        );
-*/
+
         return employeeDto;
     }
 }
