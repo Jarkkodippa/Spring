@@ -1,9 +1,10 @@
 package com.springtrain.employeeservice.service;
 
+import com.springtrain.employeeservice.dto.APIResponseDto;
 import com.springtrain.employeeservice.dto.EmployeeDto;
 
 public interface EmployeeService {
     EmployeeDto saveEmployee(EmployeeDto employeeDto);
 
-    EmployeeDto getEmployeeById(Long employeeId);
+    APIResponseDto getEmployeeById(Long employeeId);
 }
